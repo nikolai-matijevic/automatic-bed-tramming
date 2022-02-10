@@ -22,3 +22,5 @@ screw4_name: Lower Right
 horizontal_move_z: 10
 screw_thread: CW-M3
 ```
+
+![mounted assembly](https://github.com/nikolai-matijevic/automatic-bed-tramming/blob/master/Resources/IMG_20220206_083627.jpg?raw=true)
