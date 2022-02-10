@@ -20,6 +20,8 @@ horizontal_move_z: 10
 screw_thread: CW-M3
 ```
 
+The M3 screws I'm using for tramming the bed have a pitch of 0.5 mm which simply translates to a rotation distance of 0.5 in the config file for each of the stepper motors.
+
 # Usage
 
 After running `G28` and `SCREWS_TILT_CALCULATE` you will get an output similar to this:
