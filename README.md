@@ -48,4 +48,6 @@ I would advise adding a `G28` as well as `SCREWS_TILT_CALCULATE MAX_DEVIATION=0.
 
 I added a little hack to the screws_tilt_adjust.py file to output the command as well as automatically calling the macro to adjust the screws. It works for now but I will further work on implementing it the right way.
 
+Replacing the original file with the custom one found in this repository and restarting the Pi should be enough to enable that functionality but just to be sure I also deleted the .pyc file to be generated again after booting up. Keep in mind that it relies on the fact that there are 4 motors and one would need to change the macro as well as the variables in the code to change the amount of motors used for now.
+
 ![mounted assembly](https://github.com/nikolai-matijevic/automatic-bed-tramming/blob/master/Resources/IMG_20220206_083627.jpg?raw=true)
