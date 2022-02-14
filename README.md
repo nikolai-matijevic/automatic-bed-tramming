@@ -44,6 +44,8 @@ I would advise adding a `G28` as well as `SCREWS_TILT_CALCULATE MAX_DEVIATION=0.
 
 # What's next?
 
-I am working on further automating the process by having Klipper loop over the commands and adjusting the stepper motor positions by itself. This way you could just add a macro call to always have a perfectly trammed bed before each print.
+~I am working on further automating the process by having Klipper loop over the commands and adjusting the stepper motor positions by itself. This way you could just add a macro call to always have a perfectly trammed bed before each print.~
+
+I added a little hack to the screws_tilt_adjust.py file to output the command as well as automatically calling the macro to adjust the screws. It works for now but I will further work on implementing it the right way.
 
 ![mounted assembly](https://github.com/nikolai-matijevic/automatic-bed-tramming/blob/master/Resources/IMG_20220206_083627.jpg?raw=true)
