@@ -1,3 +1,5 @@
+:warning: **Experimental** If you want to use this be aware that I take no responsibility if you damage your printer in the process of using it. :warning:
+
 This is a proof of concept for the BLV MGN Cube and a CR10 style bed.
 
 Essentially I replaced the knobs with NEMA 17 stepper motors which are mounted with a printed part and control the height of the corner using a special printed coupler as well as a brass insert.
