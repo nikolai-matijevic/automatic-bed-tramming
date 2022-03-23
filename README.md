@@ -4,14 +4,14 @@ Essentially I replaced the wheels with NEMA 17 stepper motors which are mounted 
 
 If you want to try that setup out on your own printer you can either use the STL files if you have the same printer and bed or adjust the step files for your own.
 
+![mounted assembly](https://github.com/nikolai-matijevic/automatic-bed-tramming/blob/master/Resources/IMG_20220206_083627.jpg?raw=true)
+
 # Configuration
 
 Your `printer.cfg` needs to include the following configuration to load the module:
 
 ```properties
 [auto_bed_tramming]
-screw_thread: CW-M3
-
 screw1: X,Y
 screw1_stepper: stepper_name1
 
@@ -51,5 +51,3 @@ Using `RETRIES` also requires `MAX_DELTA` and tries to adjust the screws until t
 Usually I would able to answer questions on the BLV Discord server but since my account has been disabled and the support team seems to have no interest in answering my emails I set up a new account (nima#8307). I am unable to join the server using this new account which means that I can't reply to messages using this one or my original account.
 
 You can either contact me through Discord or GitHub. If you have any questions or need help setting up automatic bed tramming on your printer I'll be happy to answer and give assistance.
-
-![mounted assembly](https://github.com/nikolai-matijevic/automatic-bed-tramming/blob/master/Resources/IMG_20220206_083627.jpg?raw=true)
