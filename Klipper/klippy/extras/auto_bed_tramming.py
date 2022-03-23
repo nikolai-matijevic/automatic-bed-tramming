@@ -7,7 +7,7 @@
 import math
 from . import probe
 
-class ScrewsTiltAdjust:
+class AutoBedTramming:
     def __init__(self, config):
         self.config = config
         self.printer = config.get_printer()
@@ -81,35 +81,12 @@ class ScrewsTiltAdjust:
             coord, name = screw
             if i == i_base:
                 base = z
-
-                if name == "Lower Left":
-                    ll = z
                 
-                if name == "Lower Right":
-                    lr = z
-
-                if name == "Upper Left":
-                    ul = z
-
-                if name == "Upper Right":
-                    ur = z
                 # Show the results
                 self.gcode.respond_info(
                     "%s : x=%.1f, y=%.1f, z=%.5f" %
                     (name + ' (base)', coord[0], coord[1], z))
             else:
-                if name == "Lower Left":
-                    ll = z
-                
-                if name == "Lower Right":
-                    lr = z
-
-                if name == "Upper Left":
-                    ul = z
-
-                if name == "Upper Right":
-                    ur = z
-
                 # Calculate how knob must be adjusted for other positions
                 diff = z_base - z
                 screw_diff.append(abs(diff))
@@ -130,16 +107,10 @@ class ScrewsTiltAdjust:
                     "%s : x=%.1f, y=%.1f, z=%.5f : adjust %s %02d:%02d" %
                     (name, coord[0], coord[1], z, sign, full_turns, minutes))
         
-        if self.direction is not None:
-            self.gcode.respond_info("ADJUST_SCREWS DIR=%s BASE=%.5f LL=%.5f LR=%.5f UL=%.5f UR=%.5f" % (self.direction, base, ll, lr, ul, ur))
-            self.gcode.run_script_from_command("ADJUST_SCREWS DIR=%s BASE=%.5f LL=%.5f LR=%.5f UL=%.5f UR=%.5f" % (self.direction, base, ll, lr, ul, ur))
-        else:
-            self.gcode.respond_info("ADJUST_SCREWS BASE=%.5f LL=%.5f LR=%.5f UL=%.5f UR=%.5f" % (base, ll, lr, ul, ur))
-            self.gcode.run_script_from_command("ADJUST_SCREWS BASE=%.5f LL=%.5f LR=%.5f UL=%.5f UR=%.5f" % (base, ll, lr, ul, ur))
         if self.max_diff and any((d > self.max_diff) for d in screw_diff):
             raise self.gcode.error(
                 "bed level exceeds configured limits ({}mm)! " \
                 "Adjust screws and restart print.".format(self.max_diff))
 
 def load_config(config):
-    return ScrewsTiltAdjust(config)
+    return AutoBedTramming(config)
