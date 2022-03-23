@@ -1,57 +1,55 @@
-:warning: **Experimental** If you want to use this be aware that I take no responsibility if you damage your printer in the process of using it. :warning:
-
-Since Discord decided to disable my old account I had to setup a new one (nima#8307). I am unable to join the BLV Discord server right now since the bot isn't working right.
-
 This is a proof of concept for the BLV MGN Cube and a CR10 style bed.
 
-Essentially I replaced the knobs with NEMA 17 stepper motors which are mounted with a printed part and control the height of the corner using a special printed coupler as well as a brass insert.
+Essentially I replaced the wheels with NEMA 17 stepper motors which are mounted with a printed part and control the height of the point using a special printed coupler as well as a brass insert. It would also be possible to customize the part to use a nut instead.
 
 If you want to try that setup out on your own printer you can either use the STL files if you have the same printer and bed or adjust the step files for your own.
 
-To use the macro effectively you have to add and customize the following lines in your `printer.cfg`:
+# Configuration
+
+Your `printer.cfg` needs to include the following configuration to load the module:
 
 ```properties
-[screws_tilt_adjust]
-screw1: 68.48,40
-screw1_name: Lower Left
-screw2: 308.48,280
-screw2_name: Upper Right
-screw3: 68.48,280
-screw3_name: Upper Left
-screw4: 308.48,40
-screw4_name: Lower Right
-horizontal_move_z: 10
+[auto_bed_tramming]
 screw_thread: CW-M3
+
+screw1: X,Y
+screw1_stepper: stepper_name1
+
+screw2: X,Y
+screw1_stepper: stepper_name2
+
+screw3: X,Y
+screw3_stepper: stepper_name3
+
+...
 ```
+
+At least 3 points are needed to adjust the bed tilt. Add additional screws/motors as needed. To pair the motors to the screws you also have to add their name to the right screw.
+
+You will also have to have a probe configured in the `printer.cfg`.
 
 The M3 screws I'm using for tramming the bed have a pitch of 0.5 mm which simply translates to a rotation distance of 0.5 in the config file for each of the stepper motors.
 
 # Usage
 
-After running `G28` and `SCREWS_TILT_CALCULATE` you will get an output similar to this:
-```
-01:20 means 1 full turn and 20 minutes, CW=clockwise, CCW=counter-clockwise
-Lower Left (base) : x=68.5, y=40.0, z=2.40900
-Upper Right : x=308.5, y=280.0, z=2.41150 : adjust CCW 00:00
-Upper Left : x=68.5, y=280.0, z=2.40775 : adjust CW 00:00
-Lower Right : x=308.5, y=40.0, z=2.40650 : adjust CW 00:00
-```
+Calling `AUTO_BED_TRAMMING` will probe the configured points on the bed, calculate the difference in height between the screws and adjust them to the height of one of the screws.
 
-Now you can adjust the screws by calling the `ADJUST_SCREWS` macro with the values from the output above:
-```
-ADJUST_SCREWS BASE=2.40900 UR=2.41150 UL=2.40775 LR=2.40650
-```
+## Direction
 
-Do this until `SCREWS_TILT_CALCULATE MAX_DEVIATION=0.01` doesn't output `!! bed level exceeds configured limits (0.01mm)! Adjust screws and restart print.` anymore but remember to home the Z axis before that each time.
+You can also specify the optional `DIRECTION` parameter which can either be `CW` or `CCW` depending on the direction which should be enforced. This is especially useful right after adding the motors or if they are bottoming out. Subsequent adjustments should not need the `DIRECTION` parameter as they should only be small and not hit the upper or lower limit.
 
-I would advise adding a `G28` as well as `SCREWS_TILT_CALCULATE MAX_DEVIATION=0.01` to the end of the macro to automate the process until the desired result is reached.
+## Maximum Delta
 
-# What's next?
+The `MAX_DELTA` parameter specifies the maximum differnce between the probed points. If they exceed this value the module will throw an error.
 
-~I am working on further automating the process by having Klipper loop over the commands and adjusting the stepper motor positions by itself. This way you could just add a macro call to always have a perfectly trammed bed before each print.~
+## Retries
 
-I added a little hack to the screws_tilt_adjust.py file to output the command as well as automatically calling the macro to adjust the screws. It works for now but I will further work on implementing it the right way.
+Using `RETRIES` also requires `MAX_DELTA` and tries to adjust the screws until the probed points are within the `MAX_DELTA` value or exceed the amount of `RETRIES`.
 
-Replacing the original file with the custom one found in this repository and restarting the Pi should be enough to enable that functionality but just to be sure I also deleted the .pyc file to be generated again after booting up. Keep in mind that it relies on the fact that there are 4 motors and one would need to change the macro as well as the variables in the code to change the amount of motors used for now.
+# Contact
+
+Usually I would able to answer questions on the BLV Discord server but since my account has been disabled and the support team seems to have no interest in answering my emails I set up a new account (nima#8307). I am unable to join the server using this new account which means that I can't reply to messages using this one or my original account.
+
+You can either contact me through Discord or GitHub. If you have any questions or need help setting up automatic bed tramming on your printer I'll be happy to answer and give assistance.
 
 ![mounted assembly](https://github.com/nikolai-matijevic/automatic-bed-tramming/blob/master/Resources/IMG_20220206_083627.jpg?raw=true)
