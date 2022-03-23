@@ -23,12 +23,8 @@ class AutoBedTramming:
             screw_name = config.get(prefix + "_name", screw_name)
             self.screws.append((screw_coord, screw_name))
         if len(self.screws) < 3:
-            raise config.error("screws_tilt_adjust: Must have "
+            raise config.error("auto_bed_tramming: Must have "
                                "at least three screws")
-        self.threads = {'CW-M3': 0, 'CCW-M3': 1, 'CW-M4': 2, 'CCW-M4': 3,
-                        'CW-M5': 4, 'CCW-M5': 5}
-        self.thread = config.getchoice('screw_thread', self.threads,
-                                       default='CW-M3')
         # Initialize ProbePointsHelper
         points = [coord for coord, name in self.screws]
         self.probe_helper = probe.ProbePointsHelper(self.config,
@@ -37,15 +33,22 @@ class AutoBedTramming:
         self.probe_helper.minimum_points(3)
         # Register command
         self.gcode = self.printer.lookup_object('gcode')
-        self.gcode.register_command("SCREWS_TILT_CALCULATE",
-                                    self.cmd_SCREWS_TILT_CALCULATE,
-                                    desc=self.cmd_SCREWS_TILT_CALCULATE_help)
+        self.gcode.register_command("AUTO_BED_TRAMMING",
+                                    self.cmd_AUTO_BED_TRAMMING,
+                                    desc=self.cmd_AUTO_BED_TRAMMING_help)
     cmd_SCREWS_TILT_CALCULATE_help = "Tool to help adjust bed leveling " \
                                      "screws by calculating the number " \
-                                     "of turns to level it."
+                                     "of turns and level it with motors."
 
-    def cmd_SCREWS_TILT_CALCULATE(self, gcmd):
-        self.max_diff = gcmd.get_float("MAX_DEVIATION", None)
+    def cmd_AUTO_BED_TRAMMING(self, gcmd):
+        self.max_delta = gcmd.get_float("MAX_DELTA", None)
+        retries = gcmd.get("RETRIES", default=0)
+        if retries > 0:
+            if self.max_delta is None:
+                raise gcmd.error(
+                    "Error on '%s': MAX_DELTA must not be None when setting RETRIES" % (
+                        gcmd.get_commandline(),))
+        self.retries = retries
         # Option to force all turns to be in the given direction (CW or CCW)
         direction = gcmd.get("DIRECTION", default=None)
         if direction is not None:
