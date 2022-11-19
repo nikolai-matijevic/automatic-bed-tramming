@@ -1,14 +1,14 @@
 :warning: **Experimental** If you want to use this be aware that I take no responsibility if you damage your printer in the process of using it. :warning:
 
-Since Discord decided to disable my old account I had to setup a new one (nima#8307). I am unable to join the BLV Discord server right now since the bot isn't working right.
+Since Discord decided to disable my old account I had to setup a new one (nima#8307).
 
 This is a proof of concept for the BLV MGN Cube and a CR10 style bed.
 
-Essentially I replaced the knobs with NEMA 17 stepper motors which are mounted with a printed part and control the height of the corner using a special printed coupler as well as a brass insert.
+Essentially I replaced the wheels with NEMA 17 stepper motors which are mounted with a printed part and control the height of the corner using a special printed coupler as well as a brass insert.
 
 If you want to try that setup out on your own printer you can either use the STL files if you have the same printer and bed or adjust the step files for your own.
 
-To use the macro effectively you have to add and customize the following lines in your `printer.cfg`:
+To use the macro you have to add and *customize* the following lines in your `printer.cfg`:
 
 ```properties
 [screws_tilt_adjust]
